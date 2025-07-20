@@ -1,205 +1,190 @@
-# 경로 탐색 알고리즘 프로젝트
+# 🗺️ 경로찾기 프로젝트 컬렉션
 
-## 📋 프로젝트 개요
+이 저장소는 두 개의 독립적인 경로찾기 프로젝트를 포함하고 있습니다.
 
-이 프로젝트는 실질적인 데이터를 분석하고 이를 지도화하며, 최종적으로 경로 탐색 알고리즘을 구현하는 완전한 시스템입니다.
-
-## 🎯 주요 기능
-
-### 1. CSV 데이터 처리
-- **buildings.csv**: 건물 데이터 (10개)
-- **roads.csv**: 도로 데이터 (20개)  
-- **construction_sites.csv**: 건설현장 데이터 (6개)
-- 세 개의 CSV 파일을 자동으로 병합 및 정렬
-
-### 2. 카테고리 변환
-- 숫자로 된 구조물 ID를 의미 있는 이름으로 변환
-- 딕셔너리 기반 매핑 시스템
-- 타입별: 1=건물, 2=도로, 3=건설현장
-
-### 3. 시각화 좌표계 설계
-- (1,1)이 좌상단, (x_max, y_max)가 우하단인 2D 격자 공간
-- 50x50 기본 격자 크기 (데이터에 따라 자동 확장)
-- 격자 번호 표시 및 그리드 라인
-
-### 4. 도형별 조건 시각화
-- **건물**: 파란색 사각형 (■)
-- **도로**: 회색 원형 (●)  
-- **건설현장**: 빨간색 삼각형 (▲)
-- 겹침 우선순위: 건설현장 > 건물 > 도로
-
-### 5. 이미지 저장
-- matplotlib을 사용한 고해상도 PNG 파일 저장
-- 지도 시각화 및 경로 탐색 결과 저장
-- 300 DPI 고품질 출력
-
-### 6. 최단 경로 알고리즘 구현
-- **BFS (너비 우선 탐색)**: 직접 구현
-- **다익스트라 알고리즘**: 직접 구현
-- 외부 라이브러리 사용 금지
-- 8방향 이동 지원 (상하좌우 + 대각선)
-
-### 7. 장애물 처리
-- 건물과 건설현장은 통과 불가
-- 도로는 통과 가능
-- 시작점/도착점이 장애물인 경우 오류 처리
-
-### 8. 결과 저장
-- 경로 결과를 CSV 파일로 출력
-- 단계별 좌표 목록 저장
-- UTF-8 인코딩 지원
-
-## 🚀 실행 방법
-
-### 1. 환경 설정
-```bash
-pip install -r requirements.txt
-```
-
-### 2. 자동 데모 실행
-```bash
-python pathfinding_system.py
-```
-
-### 3. 인터랙티브 모드 실행
-```bash
-python interactive_pathfinding.py
-```
-
-## 📁 파일 구조
+## 📁 프로젝트 구조
 
 ```
 pathfinding_project/
-├── buildings.csv              # 건물 데이터
-├── roads.csv                  # 도로 데이터
-├── construction_sites.csv     # 건설현장 데이터
-├── requirements.txt           # Python 패키지 의존성
-├── pathfinding_system.py      # 메인 경로 탐색 시스템
-├── interactive_pathfinding.py # 인터랙티브 사용자 인터페이스
-└── README.md                  # 프로젝트 설명서
+├── coffee_pathfinding_project/         # ☕ 커피 경로찾기 프로젝트 (새로운 요구사항)
+│   ├── dataFile/                       # 데이터 파일들
+│   ├── caffee_map_detailed.py          # 1단계: 데이터 분석 (상세 주석)
+│   ├── map_draw_detailed.py            # 2단계: 지도 시각화 (상세 주석)
+│   ├── map_direct_save_detailed.py     # 3단계: 경로 탐색 (상세 주석)
+│   ├── caffee_map.py                   # 1단계: 데이터 분석 (기본 버전)
+│   ├── map_draw.py                     # 2단계: 지도 시각화 (기본 버전)
+│   ├── map_direct_save.py              # 3단계: 경로 탐색 (기본 버전)
+│   ├── map.png                         # 기본 지도
+│   ├── map_final.png                   # 경로가 표시된 지도
+│   ├── home_to_cafe.csv                # 경로 데이터
+│   ├── README.md                       # 프로젝트 설명서
+│   └── requirements.txt                # 필요한 라이브러리
+├── original_pathfinding_project/       # 🏗️ 원본 경로찾기 프로젝트
+│   ├── pathfinding_system.py           # 기본 경로찾기 시스템
+│   ├── pathfinding_system_detailed.py  # 상세 주석 버전
+│   ├── pathfinding_system_fixed.py     # 오류 수정 버전
+│   ├── interactive_pathfinding.py      # 대화형 경로찾기
+│   ├── buildings.csv                   # 건물 데이터
+│   ├── roads.csv                       # 도로 데이터
+│   ├── construction_sites.csv          # 건설 현장 데이터
+│   ├── path_*.csv                      # 경로 결과 파일들
+│   ├── path_*.png                      # 경로 시각화 파일들
+│   ├── map_visualization.png           # 지도 시각화
+│   ├── README.md                       # 프로젝트 설명서
+│   ├── 코딩_초보자를_위한_상세_가이드.md  # 초보자 가이드
+│   ├── 라이브러리_및_프로그램_목록.md    # 라이브러리 설명
+│   └── PROJECT_CHECKLIST.md            # 프로젝트 체크리스트
+└── dataFile/                           # 공통 데이터 파일들
+    ├── area_map.csv                    # 지역 지도 데이터
+    ├── area_struct.csv                 # 구조물 데이터
+    └── area_category.csv               # 구조물 분류 데이터
 ```
 
-## 🔧 기술 스택
+## ☕ 커피 경로찾기 프로젝트 (새로운 요구사항)
 
-- **Python 3.8+**
-- **Pandas**: CSV 데이터 처리 및 병합
-- **NumPy**: 격자 배열 처리
-- **Matplotlib**: 시각화 및 이미지 저장
-- **Collections**: BFS용 deque, 다익스트라용 defaultdict
-- **Heapq**: 다익스트라 알고리즘용 우선순위 큐
+### 📋 프로젝트 개요
+내 집에서 반달곰 커피까지의 최단 경로를 찾는 프로그램입니다.
 
-## 📊 알고리즘 비교
+### 🎯 주요 특징
+- **3단계 구조**: 데이터 분석 → 지도 시각화 → 경로 탐색
+- **상세한 주석**: 코딩 초보자도 이해할 수 있도록 작성
+- **BFS 알고리즘**: 최단 경로 탐색 구현
+- **실제 데이터**: CSV 파일을 사용한 실용적인 프로젝트
 
-| 알고리즘 | 시간복잡도 | 공간복잡도 | 특징 |
-|---------|-----------|-----------|------|
-| BFS | O(V+E) | O(V) | 최단 경로 보장, 단순함 |
-| 다익스트라 | O((V+E)logV) | O(V) | 가중치 고려, 최적 경로 |
+### 🚀 실행 방법
+```bash
+cd coffee_pathfinding_project
 
-## 🎨 시각화 예시
+# 1단계: 데이터 분석
+python caffee_map_detailed.py
 
-### 지도 시각화
-- 격자 기반 2D 지도
-- 구조물별 색상 및 도형 구분
-- 범례 및 축 라벨 포함
+# 2단계: 지도 시각화
+python map_draw_detailed.py
 
-### 경로 시각화  
-- 녹색 선으로 경로 표시
-- 시작점: 라임색 원형
-- 도착점: 주황색 별표
-- 경로상 점들: 작은 녹색 원형
-
-## 📈 출력 파일
-
-### 이미지 파일
-- `map_visualization.png`: 기본 지도 시각화
-- `path_BFS_(x1,y1)_(x2,y2).png`: BFS 경로 결과
-- `path_다익스트라_(x1,y1)_(x2,y2).png`: 다익스트라 경로 결과
-
-### CSV 파일
-- `path_result_BFS.csv`: BFS 경로 좌표
-- `path_result_다익스트라.csv`: 다익스트라 경로 좌표
-- 컬럼: step, x, y, coordinates
-
-## 🔍 사용 예시
-
-### 1. 기본 데모 실행
-```python
-from pathfinding_system import PathfindingSystem
-
-system = PathfindingSystem()
-system.run_demo()
+# 3단계: 경로 탐색
+python map_direct_save_detailed.py
 ```
 
-### 2. 특정 경로 탐색
-```python
-system = PathfindingSystem()
-data = system.load_and_merge_data()
-system.create_grid(data)
+### 📊 결과 파일
+- `map.png`: 기본 지도 시각화
+- `map_final.png`: 경로가 표시된 지도
+- `home_to_cafe.csv`: 경로 데이터
 
-# BFS로 경로 탐색
-path = system.bfs_pathfinding((2, 2), (15, 15))
-if path:
-    system.visualize_path(path, (2, 2), (15, 15), "BFS")
-    system.save_path_to_csv(path, "BFS")
-```
+### 🎨 시각화 규칙
+| 구조물 | 모양 | 색상 | 설명 |
+|--------|------|------|------|
+| 아파트/빌딩 | 원형 | 갈색 | 장애물 |
+| 반달곰 커피 | 사각형 | 녹색 | 목적지 |
+| 내 집 | 삼각형 | 녹색 | 시작점 |
+| 건설 현장 | 사각형 | 회색 | 장애물 |
 
-### 3. 인터랙티브 모드
-```python
+## 🏗️ 원본 경로찾기 프로젝트
+
+### 📋 프로젝트 개요
+다양한 경로찾기 알고리즘을 구현한 종합적인 시스템입니다.
+
+### 🎯 주요 특징
+- **다중 알고리즘**: BFS, 다익스트라 알고리즘 구현
+- **대화형 인터페이스**: 사용자 입력을 받는 인터랙티브 모드
+- **상세한 문서**: 초보자를 위한 가이드와 라이브러리 설명
+- **오류 처리**: 타입 힌트와 예외 처리
+
+### 🚀 실행 방법
+```bash
+cd original_pathfinding_project
+
+# 기본 시스템 실행
+python pathfinding_system_fixed.py
+
+# 대화형 모드
 python interactive_pathfinding.py
-# 프롬프트에 따라 시작점, 도착점, 알고리즘 선택
 ```
 
-## 🎓 학습 요소
+### 📊 결과 파일
+- `path_BFS_*.csv/png`: BFS 알고리즘 결과
+- `path_다익스트라_*.csv/png`: 다익스트라 알고리즘 결과
+- `map_visualization.png`: 지도 시각화
 
-### Pandas DataFrame 활용
-- 여러 CSV 파일 병합 및 전처리
-- 데이터 정렬 및 타입 변환
-- 결과 데이터프레임 생성 및 저장
+## 🛠️ 기술 스택
 
-### 좌표 기반 데이터 처리
-- 2D 격자 공간 설계
-- 구조물 좌표 시각화
-- 격자 기반 경로 탐색
+### 공통 라이브러리
+- **Python 3**: 메인 프로그래밍 언어
+- **pandas**: 데이터 처리 및 분석
+- **matplotlib**: 그래프 및 지도 시각화
+- **numpy**: 수치 계산
 
-### 알고리즘 이해
-- BFS 구현을 통한 최단 경로 탐색
-- 다익스트라 구현을 통한 가중치 기반 경로 탐색
-- 8방향 이동 및 장애물 처리
+### 추가 라이브러리
+- **collections.deque**: BFS 알고리즘용 큐
+- **heapq**: 다익스트라 알고리즘용 우선순위 큐
 
-### 시각화 도구 익히기
-- matplotlib을 활용한 지도 시각화
-- 경로 및 구조물 시각화
-- 고품질 이미지 저장
+## 📝 코드 특징
 
-### 파일 저장과 로딩
-- CSV 파일 읽기/쓰기
-- PNG 이미지 저장
-- UTF-8 인코딩 처리
+### 상세한 주석
+- 모든 함수와 주요 코드 블록에 설명 추가
+- 코딩 초보자도 이해할 수 있도록 작성
+- 알고리즘 동작 과정 상세 설명
 
-## 🐛 문제 해결
+### 모듈화
+- 각 단계별로 독립적인 파일로 구성
+- 함수별로 명확한 역할 분담
+- 재사용 가능한 코드 구조
 
-### 일반적인 오류
-1. **파일을 찾을 수 없습니다**: CSV 파일이 올바른 위치에 있는지 확인
-2. **경로를 찾을 수 없습니다**: 시작점/도착점이 장애물이 아닌지 확인
-3. **좌표 범위 오류**: 입력 좌표가 격자 범위 내에 있는지 확인
+### 오류 처리
+- 파일 없음, 데이터 오류 등 예외 상황 처리
+- 사용자 친화적인 오류 메시지
+- 타입 힌트를 통한 코드 안정성
 
-### 성능 최적화
-- 대용량 데이터의 경우 격자 크기 조정
-- 알고리즘 선택 시 데이터 특성 고려
-- 메모리 사용량 모니터링
+## 🎓 학습 포인트
 
-## 📝 라이선스
+### 데이터 처리
+- CSV 파일 읽기 및 병합
+- 데이터 필터링 및 정렬
+- 구조물 ID 매핑
 
-이 프로젝트는 교육 목적으로 제작되었습니다.
+### 시각화
+- matplotlib을 사용한 그래프 그리기
+- 좌표계 설정 및 변환
+- 범례 및 라벨 설정
 
-## 👥 팀 프로젝트
+### 알고리즘
+- BFS 알고리즘 구현
+- 다익스트라 알고리즘 구현
+- 2D 격자에서의 경로 탐색
+- 장애물 처리
 
-이 프로젝트는 팀 프로젝트 과제로 제작되었으며, 다음 요구사항을 모두 충족합니다:
-- ✅ CSV 데이터 처리 및 병합
-- ✅ 카테고리 변환 (딕셔너리 매핑)
-- ✅ 2D 격자 좌표계 설계
-- ✅ 구조물별 시각화 (도형, 색상)
-- ✅ PNG 이미지 저장
-- ✅ 직접 구현한 경로 탐색 알고리즘
-- ✅ 장애물 처리
-- ✅ CSV 결과 저장 
+### Python 프로그래밍
+- 함수 정의 및 호출
+- 타입 힌트 사용
+- 예외 처리
+- 파일 입출력
+- 클래스와 객체 지향 프로그래밍
+
+## 🔧 설치 및 실행
+
+### 1. 라이브러리 설치
+```bash
+pip install -r coffee_pathfinding_project/requirements.txt
+```
+
+### 2. 프로젝트 실행
+각 프로젝트 폴더로 이동하여 해당 README.md 파일을 참조하세요.
+
+## 📚 추가 학습 자료
+
+- [pandas 공식 문서](https://pandas.pydata.org/)
+- [matplotlib 공식 문서](https://matplotlib.org/)
+- [BFS 알고리즘 설명](https://en.wikipedia.org/wiki/Breadth-first_search)
+- [다익스트라 알고리즘 설명](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+- [Python 타입 힌트](https://docs.python.org/3/library/typing.html)
+
+## 👨‍💻 작성자
+
+AI Assistant
+- 상세한 주석과 설명으로 코딩 초보자도 이해할 수 있도록 작성
+- 실제 데이터를 사용한 실용적인 프로젝트
+- 단계별 학습이 가능한 구조
+- 두 가지 다른 요구사항에 맞춘 독립적인 프로젝트
+
+---
+
+**이 저장소는 데이터 분석, 시각화, 알고리즘 구현을 모두 포함한 종합적인 학습 자료입니다.** 
