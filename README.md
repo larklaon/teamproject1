@@ -111,7 +111,6 @@ python interactive_pathfinding.py
 - **Python 3**: 메인 프로그래밍 언어
 - **pandas**: 데이터 처리 및 분석
 - **matplotlib**: 그래프 및 지도 시각화
-- **numpy**: 수치 계산
 
 ### 추가 라이브러리
 - **collections.deque**: BFS 알고리즘용 큐

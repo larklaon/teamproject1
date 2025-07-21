@@ -7,7 +7,6 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 from collections import deque
 from typing import Optional, List, Tuple
 
@@ -55,7 +54,7 @@ def load_analyzed_data() -> Optional[pd.DataFrame]:  # type: ignore
         return None
 
 
-def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
+def create_grid(data: pd.DataFrame) -> Tuple[List[List[int]], int, int]:
     """
     2D 격자를 생성하는 함수
     
@@ -63,14 +62,14 @@ def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
         data: pd.DataFrame - 분석된 데이터
         
     Returns:
-        Tuple[np.ndarray, int, int]: (격자, 최대 x, 최대 y)
+        Tuple[List[List[int]], int, int]: (격자, 최대 x, 최대 y)
     """
     # 격자 크기 계산
     max_x = int(data['x'].max())
     max_y = int(data['y'].max())
     
     # 빈 격자 생성 (0: 빈 공간, 1: 건설 현장, 2: 구조물)
-    grid = np.zeros((max_y + 1, max_x + 1), dtype=int)
+    grid = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
     
     # 건설 현장 배치 (최고 우선순위)
     construction_sites = data[data['ConstructionSite'] == 1]
@@ -85,32 +84,32 @@ def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
     return grid, max_x, max_y
 
 
-def is_valid_position(pos: Tuple[int, int], grid: np.ndarray) -> bool:
+def is_valid_position(pos: Tuple[int, int], grid: List[List[int]]) -> bool:
     """
     위치가 유효한지 확인하는 함수
     
     Args:
         pos: Tuple[int, int] - 확인할 위치 (x, y)
-        grid: np.ndarray - 격자
+        grid: List[List[int]] - 격자
         
     Returns:
         bool: 유효한 위치인지 여부
     """
     x, y = pos
-    if x < 0 or y < 0 or y >= grid.shape[0] or x >= grid.shape[1]:
+    if x < 0 or y < 0 or y >= len(grid) or x >= len(grid[0]):
         return False
     return True
 
 
 def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int], 
-                   grid: np.ndarray) -> Optional[List[Tuple[int, int]]]:
+                   grid: List[List[int]]) -> Optional[List[Tuple[int, int]]]:
     """
     BFS를 사용한 최단 경로 탐색
     
     Args:
         start: Tuple[int, int] - 시작점 (x, y)
         end: Tuple[int, int] - 도착점 (x, y)
-        grid: np.ndarray - 격자
+        grid: List[List[int]] - 격자
         
     Returns:
         Optional[List[Tuple[int, int]]]: 경로 좌표 리스트, 실패시 None

@@ -33,7 +33,6 @@
 
 import pandas as pd  # 데이터 처리를 위한 라이브러리
 import matplotlib.pyplot as plt  # 그래프 그리기를 위한 라이브러리
-import numpy as np  # 수치 계산을 위한 라이브러리
 from typing import Optional, Tuple  # 타입 힌트를 위한 라이브러리
 
 

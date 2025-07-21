@@ -29,7 +29,6 @@
 
 import pandas as pd  # 데이터 처리를 위한 라이브러리
 import matplotlib.pyplot as plt  # 그래프 그리기를 위한 라이브러리
-import numpy as np  # 수치 계산을 위한 라이브러리
 from collections import deque  # 큐 자료구조를 위한 라이브러리
 from typing import Optional, List, Tuple  # 타입 힌트를 위한 라이브러리
 
@@ -92,7 +91,7 @@ def load_analyzed_data() -> Optional[pd.DataFrame]:  # type: ignore
         return None
 
 
-def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
+def create_grid(data: pd.DataFrame) -> Tuple[List[List[int]], int, int]:
     """
     2D 격자를 생성하는 함수
     
@@ -108,7 +107,7 @@ def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
         data: pd.DataFrame - 분석된 데이터
         
     Returns:
-        Tuple[np.ndarray, int, int]: (격자, 최대 x, 최대 y)
+        Tuple[List[List[int]], int, int]: (격자, 최대 x, 최대 y)
     """
     print('🗺️ 격자를 생성하는 중...')
     
@@ -123,10 +122,9 @@ def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
     # ============================================
     # 2단계: 빈 격자 생성
     # ============================================
-    # np.zeros(): 모든 값이 0인 배열 생성
-    # (max_y + 1, max_x + 1): 세로 x 가로 크기
-    # dtype=int: 정수형 데이터 타입
-    grid = np.zeros((max_y + 1, max_x + 1), dtype=int)
+    # 리스트 컴프리헨션을 사용하여 2D 배열 생성
+    # 모든 값이 0인 (max_y + 1) x (max_x + 1) 크기의 격자 생성
+    grid = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
     
     # ============================================
     # 3단계: 건설 현장 배치 (최고 우선순위)
@@ -151,7 +149,7 @@ def create_grid(data: pd.DataFrame) -> Tuple[np.ndarray, int, int]:
     return grid, max_x, max_y
 
 
-def is_valid_position(pos: Tuple[int, int], grid: np.ndarray) -> bool:
+def is_valid_position(pos: Tuple[int, int], grid: List[List[int]]) -> bool:
     """
     위치가 유효한지 확인하는 함수
     
@@ -159,7 +157,7 @@ def is_valid_position(pos: Tuple[int, int], grid: np.ndarray) -> bool:
     
     Args:
         pos: Tuple[int, int] - 확인할 위치 (x, y)
-        grid: np.ndarray - 격자
+        grid: List[List[int]] - 격자
         
     Returns:
         bool: 유효한 위치인지 여부
@@ -167,14 +165,14 @@ def is_valid_position(pos: Tuple[int, int], grid: np.ndarray) -> bool:
     x, y = pos
     
     # 격자 범위를 벗어나는지 확인
-    if x < 0 or y < 0 or y >= grid.shape[0] or x >= grid.shape[1]:
+    if x < 0 or y < 0 or y >= len(grid) or x >= len(grid[0]):
         return False
     
     return True
 
 
 def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int], 
-                   grid: np.ndarray) -> Optional[List[Tuple[int, int]]]:
+                   grid: List[List[int]]) -> Optional[List[Tuple[int, int]]]:
     """
     BFS를 사용한 최단 경로 탐색
     
@@ -190,7 +188,7 @@ def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int],
     Args:
         start: Tuple[int, int] - 시작점 (x, y)
         end: Tuple[int, int] - 도착점 (x, y)
-        grid: np.ndarray - 격자
+        grid: List[List[int]] - 격자
         
     Returns:
         Optional[List[Tuple[int, int]]]: 경로 좌표 리스트, 실패시 None
