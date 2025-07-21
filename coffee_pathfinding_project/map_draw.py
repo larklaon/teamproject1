@@ -7,6 +7,8 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'AppleGothic'  # 한글 폰트 설정 (Mac)
+plt.rcParams['axes.unicode_minus'] = False   # 마이너스 깨짐 방지
 from typing import Optional, Tuple
 
 
@@ -20,7 +22,7 @@ def load_analyzed_data() -> Optional[pd.DataFrame]:  # type: ignore
     try:
         # area1_analyzed_data.csv가 있으면 불러오고, 없으면 1단계 분석 실행
         try:
-            data = pd.read_csv('area1_analyzed_data.csv')
+            data = pd.read_csv('../area1_analyzed_data.csv')
             print('✅ 기존 분석 데이터를 불러왔습니다.')
         except FileNotFoundError:
             print('📂 1단계 분석을 실행합니다...')
@@ -145,7 +147,9 @@ def create_map_visualization(data: pd.DataFrame, save_path: str = 'map.png') -> 
     plt.title('Area 1 지도 시각화', fontsize=16, fontweight='bold')
     
     # 범례 표시
-    plt.legend(loc='upper right', fontsize=10)
+    handles, labels = plt.gca().get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    plt.legend(by_label.values(), by_label.keys(), loc='upper right', fontsize=10)
     
     # 격자 번호 표시
     plt.xticks(range(1, max_x + 1, 2))

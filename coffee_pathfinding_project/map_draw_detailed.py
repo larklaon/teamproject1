@@ -33,6 +33,8 @@
 
 import pandas as pd  # 데이터 처리를 위한 라이브러리
 import matplotlib.pyplot as plt  # 그래프 그리기를 위한 라이브러리
+plt.rcParams['font.family'] = 'AppleGothic'  # 한글 폰트 설정 (Mac)
+plt.rcParams['axes.unicode_minus'] = False   # 마이너스 깨짐 방지
 from typing import Optional, Tuple  # 타입 힌트를 위한 라이브러리
 
 
@@ -53,7 +55,7 @@ def load_analyzed_data() -> Optional[pd.DataFrame]:  # type: ignore
         # ============================================
         try:
             # 기존에 저장된 분석 데이터가 있는지 확인
-            data = pd.read_csv('area1_analyzed_data.csv')
+            data = pd.read_csv('../area1_analyzed_data.csv')
             print('✅ 기존 분석 데이터를 불러왔습니다.')
             print('   area1_analyzed_data.csv 파일에서 데이터를 읽어왔습니다.')
         except FileNotFoundError:

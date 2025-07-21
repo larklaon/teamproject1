@@ -7,6 +7,8 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'AppleGothic'  # 한글 폰트 설정 (Mac)
+plt.rcParams['axes.unicode_minus'] = False   # 마이너스 깨짐 방지
 from collections import deque
 from typing import Optional, List, Tuple
 
@@ -64,23 +66,27 @@ def create_grid(data: pd.DataFrame) -> Tuple[List[List[int]], int, int]:
     Returns:
         Tuple[List[List[int]], int, int]: (격자, 최대 x, 최대 y)
     """
-    # 격자 크기 계산
+    print('🗺️ 격자를 생성하는 중...')
     max_x = int(data['x'].max())
     max_y = int(data['y'].max())
-    
-    # 빈 격자 생성 (0: 빈 공간, 1: 건설 현장, 2: 구조물)
+    print(f'   격자 크기: {max_x} x {max_y}')
     grid = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
-    
     # 건설 현장 배치 (최고 우선순위)
     construction_sites = data[data['ConstructionSite'] == 1]
     for _, row in construction_sites.iterrows():
-        grid[row['y'], row['x']] = 1
-    
-    # 구조물 배치 (아파트와 빌딩만 장애물로 처리, 내 집과 반달곰 커피는 제외)
-    structures = data[(data['category'].isin([1, 2])) & (data['ConstructionSite'] == 0)]  # 아파트와 빌딩만
+        # 내 집, 반달곰 커피는 장애물로 처리하지 않음
+        if row.get('struct_name') in ['MyHome', 'BandalgomCoffee']:
+            continue
+        grid[row['y']][row['x']] = 1
+    print(f'   건설 현장 {len(construction_sites)}개 배치 완료')
+    # 구조물 배치 (아파트/빌딩만 장애물로 처리)
+    structures = data[(data['category'].isin([1, 2])) & (data['ConstructionSite'] == 0)]
     for _, row in structures.iterrows():
-        grid[row['y'], row['x']] = 2
-    
+        # 내 집, 반달곰 커피는 장애물로 처리하지 않음
+        if row.get('struct_name') in ['MyHome', 'BandalgomCoffee']:
+            continue
+        grid[row['y']][row['x']] = 2
+    print(f'   아파트/빌딩 {len(structures)}개 배치 완료')
     return grid, max_x, max_y
 
 
@@ -120,11 +126,11 @@ def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int],
         return None
     
     # 시작점이나 도착점이 장애물인지 확인
-    if grid[start[1], start[0]] in [1, 2]:  # 건설 현장이나 구조물
+    if grid[start[1]][start[0]] in [1, 2, 3, 4]:  # 건설 현장, 아파트/빌딩, 내 집, 반달곰 커피
         print(f"시작점 ({start[0]}, {start[1]})이 장애물입니다.")
         return None
     
-    if grid[end[1], end[0]] in [1, 2]:  # 건설 현장이나 구조물
+    if grid[end[1]][end[0]] in [1, 2, 3, 4]:  # 건설 현장, 아파트/빌딩, 내 집, 반달곰 커피
         print(f"도착점 ({end[0]}, {end[1]})이 장애물입니다.")
         return None
     
@@ -157,7 +163,7 @@ def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int],
             # 다음 위치가 유효하고 방문하지 않았고 장애물이 아니면
             if (next_pos not in visited and 
                 is_valid_position(next_pos, grid) and 
-                grid[next_y, next_x] not in [1, 2]):
+                grid[next_y][next_x] not in [1, 2, 3, 4]):
                 
                 visited.add(next_pos)
                 queue.append((next_pos, path + [next_pos]))
@@ -363,7 +369,7 @@ def main() -> None:
     print('🚶 3단계: 최단 경로 탐색 시작\n')
     
     # 분석된 데이터 불러오기
-    data = load_analyzed_data()
+    data = pd.read_csv('./area1_analyzed_data.csv')
     
     if data is None:
         print('❌ 데이터 로드에 실패했습니다.')

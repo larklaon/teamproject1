@@ -56,7 +56,7 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         # ============================================
         # pd.read_csv(): CSV 파일을 pandas DataFrame으로 읽어오는 함수
         # 'dataFile/area_map.csv': 파일 경로
-        area_map = pd.read_csv('dataFile/area_map.csv')
+        area_map = pd.read_csv('../dataFile/area_map.csv')
         
         # len(area_map): DataFrame의 행 수를 반환
         print(f'✅ area_map.csv 로드 완료: {len(area_map)}행')
@@ -71,7 +71,7 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         # 1-2. area_struct.csv 파일 읽기
         # ============================================
         # 이 파일은 구조물의 위치(x, y)와 종류(category), 지역(area) 정보를 담고 있습니다
-        area_struct = pd.read_csv('dataFile/area_struct.csv')
+        area_struct = pd.read_csv('../dataFile/area_struct.csv')
         print(f'✅ area_struct.csv 로드 완료: {len(area_struct)}행')
         print(f'   컬럼: {list(area_struct.columns)}')
         print(f'   샘플 데이터:\n{area_struct.head()}\n')
@@ -80,7 +80,7 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         # 1-3. area_category.csv 파일 읽기
         # ============================================
         # 이 파일은 구조물 종류 ID와 실제 이름을 매핑해주는 참조 테이블입니다
-        area_category = pd.read_csv('dataFile/area_category.csv')
+        area_category = pd.read_csv('../dataFile/area_category.csv')
         
         # 컬럼명에 공백이 있을 수 있으므로 제거합니다
         # .str.strip(): 문자열의 앞뒤 공백을 제거하는 함수

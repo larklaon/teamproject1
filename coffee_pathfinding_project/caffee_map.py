@@ -23,19 +23,19 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         print('📂 CSV 파일들을 불러오는 중...')
         
         # area_map.csv: 지역과 좌표 정보를 담은 기본 지도 데이터
-        area_map = pd.read_csv('dataFile/area_map.csv')
+        area_map = pd.read_csv('../dataFile/area_map.csv')
         print(f'✅ area_map.csv 로드 완료: {len(area_map)}행')
         print(f'   컬럼: {list(area_map.columns)}')
         print(f'   샘플 데이터:\n{area_map.head()}\n')
         
         # area_struct.csv: 구조물의 위치와 종류(ID)를 나타내는 데이터
-        area_struct = pd.read_csv('dataFile/area_struct.csv')
+        area_struct = pd.read_csv('../dataFile/area_struct.csv')
         print(f'✅ area_struct.csv 로드 완료: {len(area_struct)}행')
         print(f'   컬럼: {list(area_struct.columns)}')
         print(f'   샘플 데이터:\n{area_struct.head()}\n')
         
         # area_category.csv: 구조물 종류 ID를 이름으로 매핑해주는 참조 데이터
-        area_category = pd.read_csv('dataFile/area_category.csv')
+        area_category = pd.read_csv('../dataFile/area_category.csv')
         # 컬럼명의 공백 제거
         area_category.columns = area_category.columns.str.strip()
         print(f'✅ area_category.csv 로드 완료: {len(area_category)}행')
@@ -48,7 +48,7 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         print('🔄 구조물 ID를 이름으로 변환하는 중...')
         
         # category ID를 이름으로 매핑하는 딕셔너리 생성
-        category_mapping = dict(zip(area_category['category'], area_category['struct']))
+        category_mapping = dict(zip(area_category['category'], area_category['struct'].str.strip()))
         print(f'   매핑 정보: {category_mapping}')
         
         # area_struct에 구조물 이름 컬럼 추가
@@ -95,35 +95,25 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
         # 5. area 1에 대한 데이터만 필터링
         # ============================================
         print('\n🎯 area 1 데이터 필터링...')
-        
         area1_data = merged_data[merged_data['area'] == 1].copy()
         print(f'   area 1 데이터: {len(area1_data)}행')
-        
-        # area 1의 구조물 종류별 분석
         print(f'   area 1 구조물 종류별 데이터 수:')
         area1_struct_counts = area1_data['struct_name'].value_counts()  # type: ignore
         for struct, count in area1_struct_counts.items():
             print(f'     {struct}: {count}개')
-        
-        # area 1의 반달곰 커피 위치
         area1_bandalgom = area1_data[area1_data['struct_name'] == 'BandalgomCoffee']
         print(f'\n   area 1 반달곰 커피 위치:')
         for _, row in area1_bandalgom.iterrows():  # type: ignore
             print(f'     ({row["x"]}, {row["y"]})')
-        
-        # area 1의 내 집 위치
         area1_myhome = area1_data[area1_data['struct_name'] == 'MyHome']
         print(f'\n   area 1 내 집 위치:')
         for _, row in area1_myhome.iterrows():  # type: ignore
             print(f'     ({row["x"]}, {row["y"]})')
-        
         # ============================================
         # 6. 보너스: 구조물 종류별 요약 통계
         # ============================================
         print('\n📈 구조물 종류별 요약 통계 리포트')
         print('=' * 50)
-        
-        # 전체 통계
         print('전체 지역 통계:')
         total_stats = merged_data.groupby('struct_name').agg({
             'area': ['count', 'nunique'],
@@ -131,7 +121,6 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
             'y': ['min', 'max']
         }).round(2)  # type: ignore
         print(total_stats)
-        
         print('\narea 1 지역 통계:')
         area1_stats = area1_data.groupby('struct_name').agg({
             'x': ['min', 'max'],
@@ -139,8 +128,8 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
             'ConstructionSite': 'sum'
         }).round(2)  # type: ignore
         print(area1_stats)
-        
-        return area1_data  # type: ignore
+        # 최종 반환 및 저장은 전체 데이터로!
+        return merged_data  # type: ignore
         
     except FileNotFoundError as e:
         print(f'❌ 파일을 찾을 수 없습니다: {e}')
@@ -161,7 +150,7 @@ def main() -> None:
     
     if area1_data is not None:
         print('\n✅ 데이터 분석 완료!')
-        print(f'   최종 결과: area 1 데이터 {len(area1_data)}행')
+        print(f'   최종 결과: 전체 데이터 {len(area1_data)}행')
         print('\n📋 최종 데이터 샘플:')
         print(area1_data.head(10))
         

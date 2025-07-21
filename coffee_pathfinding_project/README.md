@@ -187,6 +187,37 @@ python coffee_pathfinding_project/test_all.py
 - [BFS 알고리즘 설명](https://en.wikipedia.org/wiki/Breadth-first_search)
 - [Python 타입 힌트](https://docs.python.org/3/library/typing.html)
 
+## 🖥️ 운영체제별 설치/실행 안내 (Mac/Windows/Ubuntu)
+
+### Mac (맥)
+- 설치 체크리스트: 맥_설치_체크리스트.md 참고
+- 설치 가이드: 맥_환경_설치_가이드.md 참고
+
+### Windows
+- Python 3.x 설치 (Add to PATH 체크)
+- 명령 프롬프트에서 python --version 확인
+- 가상환경 생성: python -m venv coffee_env
+- 활성화: coffee_env\Scripts\activate
+- pip install --upgrade pip
+- pip install pandas matplotlib
+- 실행: python caffee_map.py, python map_draw.py, python map_direct_save.py
+- 결과 파일: home_to_cafe.csv, map.png, map_final.png
+- 문제 해결: PermissionError(관리자 권한), UnicodeError(경로/이모지 주의)
+
+### Ubuntu
+- sudo apt update && sudo apt install python3 python3-venv python3-pip
+- python3 -m venv coffee_env
+- source coffee_env/bin/activate
+- pip install --upgrade pip
+- pip install pandas matplotlib
+- 실행: python3 caffee_map.py, python3 map_draw.py, python3 map_direct_save.py
+- 결과 파일: home_to_cafe.csv, map.png, map_final.png
+- 문제 해결: chmod +x *.py, pip install pandas matplotlib
+
+## 🧹 불필요한 파일/결과 정리
+- __pycache__, .DS_Store, coffee_env, .venv 등은 삭제해도 무방
+- 결과 파일(home_to_cafe.csv, map.png, map_final.png, area1_analyzed_data.csv)은 필요시 삭제 가능
+
 ## 👨‍💻 작성자
 
 AI Assistant
