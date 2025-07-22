@@ -140,23 +140,21 @@ def load_and_analyze_data() -> Optional[pd.DataFrame]:  # type: ignore
 
 
 def main() -> None:
-    """
-    메인 함수
-    """
     print('🚀 1단계: 데이터 수집 및 분석 시작\n')
-    
     # 데이터 분석 실행
-    area1_data = load_and_analyze_data()
-    
-    if area1_data is not None:
+    all_data = load_and_analyze_data()
+    if all_data is not None:
         print('\n✅ 데이터 분석 완료!')
-        print(f'   최종 결과: 전체 데이터 {len(area1_data)}행')
+        print(f'   최종 결과: 전체 데이터 {len(all_data)}행')
         print('\n📋 최종 데이터 샘플:')
-        print(area1_data.head(10))
-        
-        # 결과를 CSV로 저장 (선택사항)
+        print(all_data.head(10))
+        # 전체 데이터 저장
+        all_data.to_csv('all_area_analyzed_data.csv', index=False)
+        print('\n💾 전체 분석 결과가 all_area_analyzed_data.csv로 저장되었습니다.')
+        # area 1 데이터도 별도로 저장
+        area1_data = all_data[all_data['area'] == 1].copy()
         area1_data.to_csv('area1_analyzed_data.csv', index=False)
-        print('\n💾 분석 결과가 area1_analyzed_data.csv로 저장되었습니다.')
+        print('💾 area 1 분석 결과가 area1_analyzed_data.csv로 저장되었습니다.')
     else:
         print('\n❌ 데이터 분석에 실패했습니다.')
 

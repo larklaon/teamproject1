@@ -12,28 +12,14 @@ plt.rcParams['axes.unicode_minus'] = False   # 마이너스 깨짐 방지
 from typing import Optional, Tuple
 
 
-def load_analyzed_data() -> Optional[pd.DataFrame]:  # type: ignore
-    """
-    분석된 데이터를 불러오는 함수
-    
-    Returns:
-        Optional[pd.DataFrame]: 분석된 데이터프레임, 실패시 None
-    """
+def load_analyzed_data(filename: str) -> Optional[pd.DataFrame]:
     try:
-        # area1_analyzed_data.csv가 있으면 불러오고, 없으면 1단계 분석 실행
-        try:
-            data = pd.read_csv('../area1_analyzed_data.csv')
-            print('✅ 기존 분석 데이터를 불러왔습니다.')
-        except FileNotFoundError:
-            print('📂 1단계 분석을 실행합니다...')
-            # 1단계 분석 모듈 임포트 및 실행
-            from caffee_map import load_and_analyze_data
-            data = load_and_analyze_data()
-            if data is None:
-                return None
-        
+        data = pd.read_csv(filename)
+        print(f'✅ {filename} 데이터를 불러왔습니다.')
         return data
-        
+    except FileNotFoundError:
+        print(f'❌ {filename} 파일을 찾을 수 없습니다.')
+        return None
     except Exception as e:
         print(f'❌ 데이터 로드 오류: {e}')
         return None
@@ -92,6 +78,7 @@ def create_map_visualization(data: pd.DataFrame, save_path: str = 'map.png') -> 
     # 4. 건설 현장 먼저 그리기 (회색 사각형)
     # ============================================
     construction_sites = data[data['ConstructionSite'] == 1]
+    construction_coords = set(zip(construction_sites['x'], construction_sites['y']))
     if len(construction_sites) > 0:
         plt.scatter(
             construction_sites['x'],
@@ -104,18 +91,16 @@ def create_map_visualization(data: pd.DataFrame, save_path: str = 'map.png') -> 
             edgecolors='black',
             linewidth=1
         )
-    
+
     # ============================================
-    # 5. 구조물별로 시각화하기
+    # 5. 구조물별로 시각화하기 (건설 현장과 겹치면 건설 현장 우선)
     # ============================================
-    # 구조물 종류별로 순서대로 그리기
     for struct_type in ['Apartment', 'Building', 'BandalgomCoffee', 'MyHome']:
-        # 해당 타입의 데이터만 필터링 (category가 0이 아닌 경우)
         type_data = data[(data['struct_name'] == struct_type) & (data['category'] != 0)]
-        
+        # 건설 현장과 겹치는 좌표는 제외
+        type_data = type_data[~type_data.apply(lambda row: (row['x'], row['y']) in construction_coords, axis=1)]
         if len(type_data) > 0:
             config = visual_config[struct_type]
-            
             plt.scatter(
                 type_data['x'],
                 type_data['y'],
@@ -143,8 +128,14 @@ def create_map_visualization(data: pd.DataFrame, save_path: str = 'map.png') -> 
     plt.xlabel('X 좌표')
     plt.ylabel('Y 좌표')
     
-    # 제목 설정
-    plt.title('Area 1 지도 시각화', fontsize=16, fontweight='bold')
+    # 제목 동적 설정
+    if 'all' in save_path:
+        title = '전체 지역 지도 시각화'
+    elif 'area1' in save_path or (('area' in data.columns) and (data['area'] == 1).all()):
+        title = 'Area 1 지도 시각화'
+    else:
+        title = '지도 시각화'
+    plt.title(title, fontsize=16, fontweight='bold')
     
     # 범례 표시
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -188,26 +179,23 @@ def create_map_visualization(data: pd.DataFrame, save_path: str = 'map.png') -> 
 
 
 def main() -> None:
-    """
-    메인 함수
-    """
     print('🗺 2단계: 지도 시각화 시작\n')
-    
-    # 분석된 데이터 불러오기
-    data = load_analyzed_data()
-    
-    if data is not None:
-        print(f'✅ 데이터 로드 완료: {len(data)}행')
-        
-        # 지도 시각화 실행
-        create_map_visualization(data, 'map.png')
-        
-        print('\n🎉 지도 시각화 완료!')
-        print('   - map.png 파일이 생성되었습니다.')
-        print('   - 좌측 상단이 (1,1) 좌표입니다.')
-        print('   - 각 구조물이 지정된 모양과 색상으로 표시됩니다.')
+    # 전체 데이터 시각화
+    all_data = load_analyzed_data('all_area_analyzed_data.csv')
+    if all_data is not None:
+        print(f'✅ 전체 데이터 로드 완료: {len(all_data)}행')
+        create_map_visualization(all_data, 'map_all.png')
+        print('   - map_all.png 파일이 생성되었습니다.')
     else:
-        print('\n❌ 데이터 로드에 실패했습니다.')
+        print('❌ 전체 데이터 로드에 실패했습니다.')
+    # area 1 데이터 시각화
+    area1_data = load_analyzed_data('area1_analyzed_data.csv')
+    if area1_data is not None:
+        print(f'✅ area 1 데이터 로드 완료: {len(area1_data)}행')
+        create_map_visualization(area1_data, 'map_area1.png')
+        print('   - map_area1.png 파일이 생성되었습니다.')
+    else:
+        print('❌ area 1 데이터 로드에 실패했습니다.')
 
 
 if __name__ == '__main__':

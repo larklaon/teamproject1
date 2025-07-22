@@ -138,11 +138,12 @@ def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int],
     queue = deque([(start, [start])])
     visited = set([start])
     
-    # 8방향 이동 정의 (상하좌우 + 대각선)
+    # 4방향 이동 정의 (상, 하, 좌, 우)
     directions = [
-        (-1, -1), (-1, 0), (-1, 1),  # 왼쪽 위, 위, 오른쪽 위
-        (0, -1), (0, 1),             # 왼쪽, 오른쪽
-        (1, -1), (1, 0), (1, 1)      # 왼쪽 아래, 아래, 오른쪽 아래
+        (0, -1),  # 위
+        (0, 1),   # 아래
+        (-1, 0),  # 왼쪽
+        (1, 0)    # 오른쪽
     ]
     
     # BFS 메인 루프
@@ -154,7 +155,7 @@ def bfs_pathfinding(start: Tuple[int, int], end: Tuple[int, int],
             print(f"BFS로 경로를 찾았습니다! 길이: {len(path)} 단계")
             return path
         
-        # 8방향으로 이동 시도
+        # 4방향으로 이동 시도
         for dx, dy in directions:
             next_x = current[0] + dx
             next_y = current[1] + dy
@@ -369,7 +370,7 @@ def main() -> None:
     print('🚶 3단계: 최단 경로 탐색 시작\n')
     
     # 분석된 데이터 불러오기
-    data = pd.read_csv('./area1_analyzed_data.csv')
+    data = pd.read_csv('all_area_analyzed_data.csv')
     
     if data is None:
         print('❌ 데이터 로드에 실패했습니다.')
